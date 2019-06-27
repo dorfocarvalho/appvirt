@@ -6,7 +6,9 @@ const exec = require('child_process').exec;
 
 function addgroup(grp, usr){
     exec('powershell -command Add-ADGroupMember -Identity ' + grp + ' -Member ' + usr, function callback(error, stdout, stderr){
-        console.log(stdout);
+        if(stderr) {
+            console.log(stderr);
+        }
     })
 }
 
