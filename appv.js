@@ -4,9 +4,12 @@ const exphbs = require('express-handlebars');
 const JSON = require('circular-json');
 const exec = require('child_process').exec;
 
-exec('powershell -command get-childitem', function callback(error, stdout, stderr){
-  //console.log(stdout);
-})
+function addgroup(grp, usr){
+    exec('powershell -command Add-ADGroupMember -Identity ' + grp + ' -Member ' + usr, function callback(error, stdout, stderr){
+        console.log(stdout);
+    })
+}
+
 
 const app = express();
 
@@ -19,22 +22,22 @@ var groups = [];
 
 // Node SSPI Middleware
 app.use(function (req, res, next) {
-  var nodeSSPI = require('node-sspi');
-  var nodeSSPIObj = new nodeSSPI({
-    retrieveGroups: true
-  })
-  nodeSSPIObj.authenticate(req, res, function(err){
-    res.finished || next();
-  })
+        var nodeSSPI = require('node-sspi');
+        var nodeSSPIObj = new nodeSSPI({
+        retrieveGroups: true
+    })
+        nodeSSPIObj.authenticate(req, res, function(err){
+        res.finished || next();
+    })
 })
 app.use(function(req, res, next) {
-  user = req.connection.user;
-  if (req.connection.userGroups) {
-    for (var i in req.connection.userGroups) {
-      groups[i] = req.connection.userGroups[i]
+    user = req.connection.user;
+    if (req.connection.userGroups) {
+        for (var i in req.connection.userGroups) {
+            groups[i] = req.connection.userGroups[i]
+        }
     }
-  }
-  next();
+    next();
 })
 
 // Handlebars middleware
@@ -56,22 +59,24 @@ app.get("/", function(req, res){
 
 // New request route
 app.get('/request/new', function(req, res){
-  var usr = user.split("\\");
-  var domain = usr[0];
-  res.render('request/new', {
-    domain : domain,
-    user: user,
-    groups: groups
-  });
+    var usr = user.split("\\");
+    var domain = usr[0];
+    res.render('request/new', {
+        domain : domain,
+        user: user,
+        groups: groups
+    });
 });
 
 app.post('/request/confirm', function(req, res){
-  var suser = user.split("\\");
-  res.render('request/confirm', {
-    user: suser[1],
-    domain: suser[0],
-    application: req.body.app
-  })
+    var suser = user.split("\\");
+    var group = "APPV_" + req.body.app
+    addgroup(group, suser[1]);
+    res.render('request/confirm', {
+        user: suser[1],
+        domain: suser[0],
+        application: req.body.app
+    })
 })
 
 // #####################################################
