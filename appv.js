@@ -10,7 +10,6 @@ function addgroup(grp, usr){
     })
 }
 
-
 const app = express();
 
 var user = "";
