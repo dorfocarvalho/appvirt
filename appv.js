@@ -5,6 +5,9 @@ const JSON = require('circular-json');
 const exec = require('child_process').exec;
 
 function addgroup(grp, usr){
+    exec('powershell -command $env:username', function callback(error, stdout, stderr){
+        console.log(stdout);
+    })
     exec('powershell -command Add-ADGroupMember -Identity ' + grp + ' -Member ' + usr, function callback(error, stdout, stderr){
         if(stderr) {
             console.log(stderr);
@@ -33,6 +36,7 @@ app.use(function (req, res, next) {
 })
 app.use(function(req, res, next) {
     user = req.connection.user;
+    console.log(user);
     if (req.connection.userGroups) {
         for (var i in req.connection.userGroups) {
             groups[i] = req.connection.userGroups[i]
