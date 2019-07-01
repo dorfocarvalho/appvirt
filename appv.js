@@ -73,7 +73,6 @@ app.get("/", function(req, res){
 
 // New request route
 app.get('/request/new', function(req, res){
-    refreshgroup();
     var usr = user.split("\\");
     var domain = usr[0];
     res.render('request/new', {

@@ -2,12 +2,10 @@
     <div class="col-md-9 mx-auto">
         <div class="card card-body mx-auto">
             <h4>Aplicação Solicitada</h4>
-            <p>{{user}}</p>
-            <p>{{application}}</p>
+            <p>Usuário: {{user}}</p>
+            <p>Aplicação solicitada: {{application}}</p>
             <p></p>
-            <label for="exampleFormControlTextarea1">Texto gerado para o arquivo consumido pelo robô</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" readonly>IBM-VirtEng|{{domain}};{{user}};GRUPO_APPV_{{application}};INCLUIR</textarea>
-            <label for="exampleFormControlTextarea1">List de grupos que o usuário pertence</label>
+            <label for="exampleFormControlTextarea1">Lista de grupos que o usuário pertence</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" readonly>{{groups}}</textarea>
         </div>
     </div>
