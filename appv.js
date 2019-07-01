@@ -3,11 +3,15 @@ const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const JSON = require('circular-json');
 const exec = require('child_process').exec;
+const sleep = require('system-sleep');
+
+const app = express();
+
+var user = "";
+var groups = [];
+var psgroups = "";
 
 function addgroup(grp, usr){
-    exec('powershell -command $env:username', function callback(error, stdout, stderr){
-        console.log(stdout);
-    })
     exec('powershell -command Add-ADGroupMember -Identity ' + grp + ' -Member ' + usr, function callback(error, stdout, stderr){
         if(stderr) {
             console.log(stderr);
@@ -15,10 +19,15 @@ function addgroup(grp, usr){
     })
 }
 
-const app = express();
-
-var user = "";
-var groups = [];
+function getgroups(usr){
+    exec('powershell -command "Get-ADPrincipalGroupMembership -Identity ' + usr + ' | Select-Object -Property Name"', function callback(error, stdout, stderr){
+        if(stderr){
+            console.log(stderr)
+        } else {
+            psgroups = stdout
+        }
+    })
+}
 
 // #####################################################
 // #################### MIDDLEWARE #####################
@@ -64,6 +73,7 @@ app.get("/", function(req, res){
 
 // New request route
 app.get('/request/new', function(req, res){
+    refreshgroup();
     var usr = user.split("\\");
     var domain = usr[0];
     res.render('request/new', {
@@ -77,10 +87,13 @@ app.post('/request/confirm', function(req, res){
     var suser = user.split("\\");
     var group = "APPV_" + req.body.app
     addgroup(group, suser[1]);
+    getgroups(suser[1]);
+    sleep(10000);
     res.render('request/confirm', {
         user: suser[1],
         domain: suser[0],
-        application: req.body.app
+        application: req.body.app,
+        groups: psgroups
     })
 })
 
