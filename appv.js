@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
-const JSON = require('circular-json');
+//const JSON = require('circular-json');
 const exec = require('child_process').exec;
 const sleep = require('system-sleep');
 
@@ -9,7 +9,7 @@ const app = express();
 
 var user = "";
 var groups = [];
-var psgroups = "";
+var psgroups = "Please refresh the page";
 
 function addgroup(grp, usr){
     exec('powershell -command Add-ADGroupMember -Identity ' + grp + ' -Member ' + usr, function callback(error, stdout, stderr){
