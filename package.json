@@ -16,7 +16,7 @@
     "activedirectory": "^0.7.2",
     "circular-json": "^0.5.9",
     "express": "^4.16.4",
-    "express-handlebars": "^3.0.2",
+    "express-handlebars": "^5.3.1",
     "express-session": "^1.16.1",
     "node-sspi": "^0.2.5",
     "passport": "^0.4.0",
