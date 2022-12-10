@@ -15,7 +15,7 @@
   "dependencies": {
     "activedirectory": "^0.7.2",
     "circular-json": "^0.5.9",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-handlebars": "^3.0.2",
     "express-session": "^1.16.1",
     "node-sspi": "^0.2.5",
